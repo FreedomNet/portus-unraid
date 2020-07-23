@@ -1,1 +1,207 @@
 
+<?xml version="1.0" encoding="utf-8"?>
+<Container>
+  <TemplateURL>https://raw.githubusercontent.com/FreedomNet/portus-unraid/master/template.xml</TemplateURL>
+  <Beta>False</Beta>
+  <Category>Cloud Network:Management Productivity Tools:Utilities</Category>
+  <Date>2020-07-23</Date>
+  <Name>portus</Name>
+  <Support>https://github.com/FreedomNet/portus-unraid/issues</Support>
+  <Project>https://port.us.org/</Project>
+  <Overview>Portus is an open source authorization service and user interface for the next generation Docker Registry.</Overview>
+  <Registry>https://hub.docker.com/r/opensuse/portus/</Registry>
+  <Repository>opensuse/portus:latest</Repository>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Environment>
+    <Variable>
+      <Name>PUID</Name>
+      <Value>99</Value>
+    </Variable>
+    <Variable>
+      <Name>PGID</Name>
+      <Value>100</Value>
+    </Variable>
+    <Variable>
+      <Name>CCONFIG_PREFIX</Name>
+      <Value>PORTUS</Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_MACHINE_FQDN_VALUE</Name>
+      <Value></Value>
+    </Variable>
+    <Variable>
+      <Name>RAILS_SERVE_STATIC_FILES</Name>
+      <Value>true</Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_SIGNUP_ENABLED</Name>
+      <Value>false</Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_SECRET_KEY_BASE</Name>
+      <Value></Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_KEY_PATH</Name>
+      <Value>/certificates/portus.key</Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_PASSWORD</Name>
+      <Value></Value>
+    </Variable>
+    <Variable>
+      <Name>PORTUS_CHECK_SSL_USAGE_ENABLE</Name>
+      <Value>false</Value>
+    </Variable>
+  </Environment>
+  <Networking>
+    <Mode>bridge</Mode>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/certificates</ContainerDir>
+      <Mode>ro</Mode>
+    </Volume>
+    <Volume>
+      <HostDir></HostDir>
+      <ContainerDir>/src/Portus/public</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Version>efeb8a4</Version>
+  <WebUI>http://[IP]:[PORT:3000]/</WebUI>
+  <Icon>https://raw.githubusercontent.com/FreedomNet/portus-unraid/master/portus-icon.png</Icon>
+  <ExtraParams>--entrypoint /bin/sh --entrypoint /init</ExtraParams>
+  <Labels>
+    <Label>
+        <Value>true</Value>
+        <Name>traefik.enable</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>traefik_proxy</Value>
+        <Name>traefik.docker.network</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>3000</Value>
+        <Name>traefik.http.services.portus.loadBalancer.server.port</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>Host(`registry.DOMAIN_NAME`) && PathPrefix(`/`)</Value>
+        <Name>traefik.http.routers.portus.rule</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>web</Value>
+        <Name>traefik.http.routers.portus.entrypoints</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>redirect@file</Value>
+        <Name>traefik.http.routers.portus.middlewares</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/webhook`) || Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/token`)</Value>
+        <Name>traefik.http.routers.portus-hooks.rule</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>web</Value>
+        <Name>traefik.http.routers.portus-hooks.entrypoints</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>redirect@file</Value>
+        <Name>traefik.http.routers.portus-hooks.middlewares</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>Host(`registry.DOMAIN_NAME`) && PathPrefix(`/`)</Value>
+        <Name>traefik.http.routers.portus-secure.rule</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>websecure</Value>
+        <Name>traefik.http.routers.portus-secure.entrypoints</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>secure@file</Value>
+        <Name>traefik.http.routers.portus-secure.middlewares</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>true</Value>
+        <Name>traefik.http.routers.portus-secure.tls</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>dnschallenge</Value>
+        <Name>traefik.http.routers.portus-secure.tls.certResolver</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/webhook`) || Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/token`)</Value>
+        <Name>traefik.http.routers.portus-hooks-secure.rule</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>websecure</Value>
+        <Name>traefik.http.routers.portus-hooks-secure.entrypoints</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>secure@file</Value>
+        <Name>traefik.http.routers.portus-hooks-secure.middlewares</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>true</Value>
+        <Name>traefik.http.routers.portus-hooks-secure.tls</Name>
+        <Mode />
+    </Label>
+    <Label>
+        <Value>dnschallenge</Value>
+        <Name>traefik.http.routers.portus-hooks-secure.tls.certResolver</Name>
+        <Mode />
+    </Label>
+  </Labels>
+  <Config Name="Enable Traefik" Target="traefik.enable" Default="" Mode="" Description="Container Label: traefik.enable" Type="Label" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="Traefik Docker Network" Target="traefik.docker.network" Default="" Mode="" Description="Container Label: traefik.docker.network" Type="Label" Display="always" Required="false" Mask="false">traefik_proxy</Config>
+  <Config Name="Traefik Container Port" Target="traefik.http.services.portus.loadBalancer.server.port" Default="" Mode="" Description="Container Label: traefik.http.services.portus.loadBalancer.server.port" Type="Label" Display="always" Required="false" Mask="false">3000</Config>
+  <Config Name="Traefik HTTP Host Configuration Rule" Target="traefik.http.routers.portus.rule" Default="" Mode="" Description="Container Label: traefik.http.routers.portus.rule" Type="Label" Display="always" Required="true" Mask="false">Host(`registry.DOMAIN_NAME`) && PathPrefix(`/`)</Config>
+  <Config Name="Traefik HTTP Host Configuration Entrypoint" Target="traefik.http.routers.portus.entrypoints" Default="" Mode="" Description="Container Label: traefik.http.routers.portus.entrypoints" Type="Label" Display="always" Required="false" Mask="false">web</Config>
+  <Config Name="Traefik HTTP Host Configuration Middleware" Target="traefik.http.routers.portus.middlewares" Default="" Mode="" Description="Container Label: traefik.http.routers.portus.middlewares" Type="Label" Display="always" Required="false" Mask="false">redirect@file</Config>
+  
+  <Config Name="Traefik HTTP (Hooks) Host Configuration Rule" Target="traefik.http.routers.portus-hooks.rule" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks.rule" Type="Label" Display="always" Required="true" Mask="false">Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/webhook`) || Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/token`)</Config>
+  <Config Name="Traefik HTTP (Hooks) Host Configuration Entrypoint" Target="traefik.http.routers.portus-hooks.entrypoints" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks.entrypoints" Type="Label" Display="always" Required="false" Mask="false">web</Config>
+  <Config Name="Traefik HTTP (Hooks) Host Configuration Middleware" Target="traefik.http.routers.portus-hooks.middlewares" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks.middlewares" Type="Label" Display="always" Required="false" Mask="false">redirect@file</Config>
+  
+  <Config Name="Traefik HTTPS Host Configuration Rule" Target="traefik.http.routers.portus-secure.rule" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-secure.rule" Type="Label" Display="always" Required="true" Mask="false">Host(`registry.DOMAIN_NAME`) && PathPrefix(`/`)</Config>
+  <Config Name="Traefik HTTPS Host Configuration Entrypoint" Target="traefik.http.routers.portus-secure.entrypoints" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-secure.entrypoints" Type="Label" Display="always" Required="false" Mask="false">websecure</Config>
+  <Config Name="Traefik HTTPS Host Configuration Middleware" Target="traefik.http.routers.portus-secure.middlewares" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-secure.middlewares" Type="Label" Display="always" Required="false" Mask="false">secure@file</Config>
+  <Config Name="Traefik HTTPS Host Configuration Enable TLS" Target="traefik.http.routers.portus-secure.tls" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-secure.tls" Type="Label" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="Traefik HTTPS Host Configuration TLS Challenge" Target="traefik.http.routers.portus-secure.tls.certResolver" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-secure.tls.certResolver" Type="Label" Display="always" Required="false" Mask="false">dnschallenge</Config>
+
+  <Config Name="Traefik HTTPS (Hooks) Host Configuration Rule" Target="traefik.http.routers.portus-hooks-secure.rule" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks-secure.rule" Type="Label" Display="always" Required="true" Mask="false">Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/webhook`) || Host(`registry.DOMAIN_NAME`) && PathPrefix(`/v2/token`)</Config>
+  <Config Name="Traefik HTTPS (Hooks) Host Configuration Entrypoint" Target="traefik.http.routers.portus-hooks-secure.entrypoints" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks-secure.entrypoints" Type="Label" Display="always" Required="false" Mask="false">websecure</Config>
+  <Config Name="Traefik HTTPS (Hooks) Host Configuration Middleware" Target="traefik.http.routers.portus-hooks-secure.middlewares" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks-secure.middlewares" Type="Label" Display="always" Required="false" Mask="false">secure@file</Config>
+  <Config Name="Traefik HTTPS (Hooks) Host Configuration Enable TLS" Target="traefik.http.routers.portus-hooks-secure.tls" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks-secure.tls" Type="Label" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="Traefik HTTPS (Hooks) Host Configuration TLS Challenge" Target="traefik.http.routers.portus-hooks-secure.tls.certResolver" Default="" Mode="" Description="Container Label: traefik.http.routers.portus-hooks-secure.tls.certResolver" Type="Label" Display="always" Required="false" Mask="false">dnschallenge</Config>
+
+  <Config Name="CCONFIG_PREFIX" Target="CCONFIG_PREFIX" Default="" Mode="" Description="Portus - Configuration Prefix" Type="Variable" Display="always" Required="false" Mask="false">PORTUS</Config>
+  <Config Name="PORTUS_MACHINE_FQDN_VALUE" Target="PORTUS_MACHINE_FQDN_VALUE" Default="" Mode="" Description="Portus - Web Interface Domain" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="RAILS_SERVE_STATIC_FILES" Target="RAILS_SERVE_STATIC_FILES" Default="" Mode="" Description="Portus - Serve Static Files" Type="Variable" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="PORTUS_SIGNUP_ENABLED" Target="PORTUS_SIGNUP_ENABLED" Default="" Mode="" Description="Portus - Enable Registration" Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="PORTUS_SECRET_KEY_BASE" Target="PORTUS_SECRET_KEY_BASE" Default="" Mode="" Description="Portus - Session Encryption Key" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="PORTUS_KEY_PATH" Target="PORTUS_KEY_PATH" Default="" Mode="" Description="Portus - Private JWT Keys Path" Type="Variable" Display="always" Required="false" Mask="false">/certificates/portus.key</Config>
+  <Config Name="PORTUS_PASSWORD" Target="PORTUS_PASSWORD" Default="" Mode="" Description="Portus - Password for 'portus' User" Type="Variable" Display="always" Required="true" Mask="false"></Config>
+  <Config Name="PORTUS_CHECK_SSL_USAGE_ENABLE" Target="PORTUS_CHECK_SSL_USAGE_ENABLE" Default="" Mode="" Description="Portus - Require SSL" Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="PUID" Target="PUID" Default="" Mode="" Description="Container Variable: PUID" Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="" Mode="" Description="Container Variable: PGID" Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
+</Container>
