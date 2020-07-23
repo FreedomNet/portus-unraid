@@ -1,0 +1,21 @@
+http:
+  middlewares:
+    redirect:
+      redirectScheme:
+        scheme: https
+    secure:
+      headers:
+        sslRedirect: true
+        stsSeconds: 315360000
+        browserXSSFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        sslHost: DOMAIN_NAME
+        stsIncludeSubdomains: true
+        stsPreload: true
+        frameDeny: true
+        customResponseHeaders:
+          X-Forwarded-Proto: "https"
+    sameOrigin:
+      headers:
+        customFrameOptionsValue: SAMEORIGIN
